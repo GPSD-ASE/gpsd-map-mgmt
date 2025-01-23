@@ -1,1 +1,1 @@
-# gpsd-map-mgmt-svc
+# GPSD Map Management Service
