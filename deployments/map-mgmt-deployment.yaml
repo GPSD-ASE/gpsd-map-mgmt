@@ -25,7 +25,7 @@ spec:
         - name: NODE_ENV
           value: "staging"
         - name: GPSD_MAP_MGMT_PORT
-          value: "9000"
+          value: "7000"
         livenessProbe:
           httpGet:
             path: /api/map/health
