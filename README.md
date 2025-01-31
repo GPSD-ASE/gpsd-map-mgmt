@@ -1,1 +1,0 @@
-# GPSD Map Management Service
