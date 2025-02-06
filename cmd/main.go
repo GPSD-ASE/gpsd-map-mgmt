@@ -1,21 +1,30 @@
 package main
 
 import (
+	"disaster-response-map-api/pkg/database"
+	"disaster-response-map-api/pkg/router"
 	"log"
-	"disaster-response-map-api/config"
-    "disaster-response-map-api/pkg/database"
-    "disaster-response-map-api/pkg/router"
 )
 
 func main() {
-	// Load environment variables
-	config.LoadConfig()
+	// Initialize database connection
+	db, err := database.NewDatabase()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// Connect to PostgreSQL
-	database.ConnectDB()
+	// Run migrations
+	if err := db.Migrate(); err != nil {
+		log.Fatal(err)
+	}
 
-	// Start API Server
-	r := router.SetupRouter()
-	log.Println("Starting Disaster Response API on port 8080")
+	// Ensure the database connection is closed when the app exits
+	defer db.Close()
+
+	// Initialize router and pass database instance
+	r := router.SetupRouter(db)
+
+	// Start the server
+	log.Println("Server running on port 8080")
 	r.Run(":8080")
 }

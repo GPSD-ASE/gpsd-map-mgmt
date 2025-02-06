@@ -1,28 +1,30 @@
 package handlers
 
 import (
+	"disaster-response-map-api/pkg/database"
 	"log"
 	"net/http"
-	"disaster-response-map-api/pkg/database"
+
 	"github.com/gin-gonic/gin"
 )
 
-type DisasterZone struct {
-	ID        int    `json:"id"`
-	Name      string `json:"name"`
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
-	Radius    float64 `json:"radius"` // In meters
+// DisasterZoneHandler holds a reference to the database interface
+type DisasterZoneHandler struct {
+	DB database.DatabaseInterface
 }
 
-// Create Disaster Zone
-// Create a disaster zone
-func CreateDisasterZone(c *gin.Context) {
+// NewDisasterZoneHandler initializes a new handler with dependency injection
+func NewDisasterZoneHandler(db database.DatabaseInterface) *DisasterZoneHandler {
+	return &DisasterZoneHandler{DB: db}
+}
+
+// CreateDisasterZone handles disaster zone creation
+func (h *DisasterZoneHandler) CreateDisasterZone(c *gin.Context) {
 	var zone struct {
-		Name    string  `json:"name"`
-		Lat     float64 `json:"latitude"`
-		Lng     float64 `json:"longitude"`
-		Radius  float64 `json:"radius"`
+		Name   string  `json:"name"`
+		Lat    float64 `json:"latitude"`
+		Lng    float64 `json:"longitude"`
+		Radius float64 `json:"radius"`
 	}
 
 	if err := c.BindJSON(&zone); err != nil {
@@ -30,31 +32,23 @@ func CreateDisasterZone(c *gin.Context) {
 		return
 	}
 
-	// Insert into PostgreSQL
-	_, err := database.DB.Exec(`
+	_, err := h.DB.Exec(`
 		INSERT INTO disaster_zones (name, latitude, longitude, radius) 
-		VALUES ($1, $2, $3, $4)`, 
+		VALUES ($1, $2, $3, $4)`,
 		zone.Name, zone.Lat, zone.Lng, zone.Radius)
 
 	if err != nil {
-		// Log the exact error to debug
 		log.Println("Database Insert Error:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create disaster zone", "details": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create disaster zone"})
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Disaster zone created successfully"})
 }
 
-
-// Health Check Endpoint
-func HealthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "ok"})
-}
-
-// Get All Disaster Zones
-func GetDisasterZones(c *gin.Context) {
-	rows, err := database.DB.Query("SELECT id, name, latitude, longitude, radius FROM disaster_zones")
+// GetDisasterZones retrieves all disaster zones
+func (h *DisasterZoneHandler) GetDisasterZones(c *gin.Context) {
+	rows, err := h.DB.Query("SELECT id, name, latitude, longitude, radius FROM disaster_zones")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch disaster zones"})
 		return
@@ -81,13 +75,21 @@ func GetDisasterZones(c *gin.Context) {
 	c.JSON(http.StatusOK, zones)
 }
 
-// Delete Disaster Zone
-func DeleteDisasterZone(c *gin.Context) {
+// DeleteDisasterZone deletes a disaster zone by ID
+func (h *DisasterZoneHandler) DeleteDisasterZone(c *gin.Context) {
 	id := c.Param("id")
-	_, err := database.DB.Exec("DELETE FROM disaster_zones WHERE id = $1", id)
 
+	// Execute delete query
+	result, err := h.DB.Exec("DELETE FROM disaster_zones WHERE id = $1", id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete disaster zone"})
+		return
+	}
+
+	// Check if any rows were affected
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Disaster zone not found"})
 		return
 	}
 

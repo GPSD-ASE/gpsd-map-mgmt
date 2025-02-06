@@ -1,24 +1,23 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
 	"disaster-response-map-api/internal/handlers"
-	"disaster-response-map-api/pkg/middleware"
+	"disaster-response-map-api/pkg/database"
+
+	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter() *gin.Engine {
+// SetupRouter initializes the Gin router and routes
+func SetupRouter(db *database.Database) *gin.Engine {
 	r := gin.Default()
 
-	// Public Endpoints
-	r.GET("/health", handlers.HealthCheck)
+	// Create disaster zone handler (pass db)
+	disasterZoneHandler := handlers.NewDisasterZoneHandler(db)
 
-	// Protected Endpoints
-	api := r.Group("/api")
-	api.Use(middleware.AuthMiddleware())
-
-	api.POST("/disaster-zones", handlers.CreateDisasterZone)
-	api.GET("/disaster-zones", handlers.GetDisasterZones)
-	api.DELETE("/disaster-zones/:id", handlers.DeleteDisasterZone)
+	// Define API routes
+	r.POST("/zones", disasterZoneHandler.CreateDisasterZone)
+	r.GET("/zones", disasterZoneHandler.GetDisasterZones)
+	r.DELETE("/zones/:id", disasterZoneHandler.DeleteDisasterZone)
 
 	return r
 }

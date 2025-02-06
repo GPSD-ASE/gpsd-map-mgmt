@@ -1,0 +1,73 @@
+# Binaries and executables
+*.exe
+*.out
+*.test
+*.bin
+*.o
+*.a
+*.so
+
+# Go build artifacts
+/build/
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# Dependency directories
+vendor/
+node_modules/
+
+# Go workspace-related files
+go.work
+go.work.sum
+
+# Go modules
+go.sum
+go.mod
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Gin framework temp files (optional)
+gin-bin
+gin-run
+*.pid
+
+# Logs
+logs/
+*.log
+
+# Secrets and environment variables
+.env
+.env.*
+config.yaml
+config.toml
+config.json
+
+# Testing & Debugging files
+*.coverprofile
+*.test
+coverage.out
+debug.log
+trace.out
+
+# Docker
+docker-compose.override.yml
+*.dockerfile
+
+# Kubernetes
+*.yaml
+*.yml
+.kube/
+
+# GitHub Actions (temporary workflow runs)
+.github/workflows/*.log
+.github/workflows/*.bak

@@ -6,45 +6,67 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-var DB *sql.DB
+// DatabaseInterface defines the expected database operations
+type DatabaseInterface interface {
+	Exec(query string, args ...interface{}) (sql.Result, error)
+	Query(query string, args ...interface{}) (*sql.Rows, error)
+	Close() error
+}
 
-func ConnectDB() {
-	// Load Database URL
+// Database struct for PostgreSQL implementation
+type Database struct {
+	DB *sql.DB
+}
+
+// Exec executes an SQL statement
+func (d *Database) Exec(query string, args ...interface{}) (sql.Result, error) {
+	return d.DB.Exec(query, args...)
+}
+
+// Query runs an SQL query and returns rows
+func (d *Database) Query(query string, args ...interface{}) (*sql.Rows, error) {
+	return d.DB.Query(query, args...)
+}
+
+// Close closes the database connection
+func (d *Database) Close() error {
+	return d.DB.Close()
+}
+
+// NewDatabase initializes a new PostgreSQL database
+func NewDatabase() (*Database, error) {
+	_ = godotenv.Load()
+
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
-		log.Fatal("DATABASE_URL is not set")
+		return nil, fmt.Errorf("DATABASE_URL is not set")
 	}
 
-	// Connect to PostgreSQL
-	var err error
-	DB, err = sql.Open("postgres", dbURL)
+	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
-	if err = DB.Ping(); err != nil {
-		log.Fatal("Database not reachable:", err)
+	if err = db.Ping(); err != nil {
+		return nil, fmt.Errorf("database not reachable: %w", err)
 	}
 
 	log.Println("Connected to PostgreSQL successfully")
-
-	// Run SQL migration script
-	if err := runMigrations(); err != nil {
-		log.Fatal("Database migration failed:", err)
-	}
+	return &Database{DB: db}, nil
 }
 
-// Run SQL migrations
-func runMigrations() error {
+// Migrate runs SQL migrations
+func (d *Database) Migrate() error {
 	script, err := os.ReadFile("tables.sql")
 	if err != nil {
 		return fmt.Errorf("failed to read migration file: %w", err)
 	}
 
-	_, err = DB.Exec(string(script))
+	_, err = d.DB.Exec(string(script))
 	if err != nil {
 		return fmt.Errorf("migration execution failed: %w", err)
 	}
