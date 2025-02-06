@@ -25,6 +25,6 @@ func main() {
 	r := router.SetupRouter(db)
 
 	// Start the server
-	log.Println("Server running on port 8080")
-	r.Run(":8080")
+	log.Println("Server running on port 7000")
+	r.Run(":7000")
 }

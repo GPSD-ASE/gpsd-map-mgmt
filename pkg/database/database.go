@@ -2,11 +2,12 @@ package database
 
 import (
 	"database/sql"
+	"disaster-response-map-api/config"
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -39,9 +40,12 @@ func (d *Database) Close() error {
 
 // NewDatabase initializes a new PostgreSQL database
 func NewDatabase() (*Database, error) {
-	_ = godotenv.Load()
+	config.LoadConfig()
 
-	dbURL := os.Getenv("DATABASE_URL")
+	dbURL := config.DB_URL
+	if !strings.Contains(dbURL, "@") { // If no '@', assume credentials are missing
+		dbURL = fmt.Sprintf("postgres://%s:%s@%s", config.DB_USERNAME, config.DB_PASS, dbURL[11:])
+	}
 	if dbURL == "" {
 		return nil, fmt.Errorf("DATABASE_URL is not set")
 	}

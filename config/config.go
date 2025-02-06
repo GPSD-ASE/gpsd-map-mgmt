@@ -8,8 +8,10 @@ import (
 )
 
 var (
-	DB_URL     string
-	JWT_SECRET string
+	DB_URL      string
+	JWT_SECRET  string
+	DB_USERNAME string
+	DB_PASS     string
 )
 
 func LoadConfig() {
@@ -19,6 +21,8 @@ func LoadConfig() {
 	}
 
 	DB_URL = os.Getenv("DATABASE_URL")
+	DB_PASS = os.Getenv("DATABASE_PASS")
+	DB_USERNAME = os.Getenv("DATABASE_USERNAME")
 	JWT_SECRET = os.Getenv("JWT_SECRET")
 
 	if DB_URL == "" || JWT_SECRET == "" {
