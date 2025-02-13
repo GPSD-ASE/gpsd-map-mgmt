@@ -10,39 +10,33 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// DatabaseInterface defines the expected database operations
 type DatabaseInterface interface {
 	Exec(query string, args ...interface{}) (sql.Result, error)
 	Query(query string, args ...interface{}) (*sql.Rows, error)
 	Close() error
 }
 
-// Database struct for PostgreSQL implementation
 type Database struct {
 	DB *sql.DB
 }
 
-// Exec executes an SQL statement
 func (d *Database) Exec(query string, args ...interface{}) (sql.Result, error) {
 	return d.DB.Exec(query, args...)
 }
 
-// Query runs an SQL query and returns rows
 func (d *Database) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	return d.DB.Query(query, args...)
 }
 
-// Close closes the database connection
 func (d *Database) Close() error {
 	return d.DB.Close()
 }
 
-// NewDatabase initializes a new PostgreSQL database
 func NewDatabase() (*Database, error) {
 	config.LoadConfig()
 
 	dbURL := config.DB_URL
-	if !strings.Contains(dbURL, "@") { // If no '@', assume credentials are missing
+	if !strings.Contains(dbURL, "@") {
 		dbURL = fmt.Sprintf("postgres://%s:%s@%s", config.DB_USERNAME, config.DB_PASS, dbURL[11:])
 	}
 	if dbURL == "" {

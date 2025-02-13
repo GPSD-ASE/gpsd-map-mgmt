@@ -1,3 +1,9 @@
+// @title Disaster Response Map API
+// @version 1.0.0
+// @description API for disaster response, including retrieval of disaster zones, routing between two points, and calculating evacuation routes.
+// @contact.name Rokas Paulauskas
+// @contact.email paulausr@tcd.ie
+// @BasePath /
 package handlers
 
 import (
@@ -19,22 +25,38 @@ type EvacuationHandler struct {
 }
 
 // NewEvacuationHandler creates a new instance of EvacuationHandler.
+// @Summary Create Evacuation Handler
+// @Description Returns a new instance of EvacuationHandler.
+// @Tags Evacuation
 func NewEvacuationHandler(service EvacuationServiceInterface) *EvacuationHandler {
 	return &EvacuationHandler{Service: service}
 }
 
 // EvacuationRequest defines the expected JSON payload for an evacuation request.
-// danger_point: coordinates of the danger zone.
-// incident_type_id: used to match a safe zone in the database.
-// safe_point: optional; if not provided, the nearest safe zone matching the incident type is used.
+// swagger:model EvacuationRequest
 type EvacuationRequest struct {
-	DangerPoint    [2]float64  `json:"danger_point"`
-	IncidentTypeID int         `json:"incident_type_id"`
-	SafePoint      *[2]float64 `json:"safe_point,omitempty"`
+	// Coordinates of the danger zone in [latitude, longitude] format.
+	// example: [53.349805, -6.26031]
+	DangerPoint [2]float64 `json:"danger_point" example:"[53.349805, -6.26031]"`
+	// Incident type ID used to match a safe zone in the database.
+	// example: 3
+	IncidentTypeID int `json:"incident_type_id" example:"3"`
+	// (Optional) Coordinates of the safe zone in [latitude, longitude] format.
+	// example: [53.3440, -6.2670]
+	SafePoint *[2]float64 `json:"safe_point,omitempty" example:"[53.3440, -6.2670]"`
 }
 
-// GetEvacuationRoute handles the HTTP POST request to get an evacuation route.
-// It validates the incoming JSON payload, calls the EvacuationService, and returns the route.
+// GetEvacuationRoute godoc
+// @Summary      Calculate Evacuation Route
+// @Description  Calculates an evacuation route from a danger point to a safe zone. If safe_point is omitted, the API determines the nearest safe zone matching the incident type.
+// @Tags         Evacuation
+// @Accept       json
+// @Produce      json
+// @Param        evacuationRequest  body      EvacuationRequest  true  "Evacuation Request"
+// @Success      200  {object}  services.EvacuationRouteResponse
+// @Failure      400  {object}  map[string]string  "Invalid request payload"
+// @Failure      500  {object}  map[string]string  "Internal server error"
+// @Router       /evacuation [post]
 func (h *EvacuationHandler) GetEvacuationRoute(c *gin.Context) {
 	var req EvacuationRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
