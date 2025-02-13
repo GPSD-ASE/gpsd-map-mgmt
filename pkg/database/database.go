@@ -5,7 +5,6 @@ import (
 	"disaster-response-map-api/config"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	_ "github.com/lib/pq"
@@ -61,20 +60,4 @@ func NewDatabase() (*Database, error) {
 
 	log.Println("Connected to PostgreSQL successfully")
 	return &Database{DB: db}, nil
-}
-
-// Migrate runs SQL migrations
-func (d *Database) Migrate() error {
-	script, err := os.ReadFile("tables.sql")
-	if err != nil {
-		return fmt.Errorf("failed to read migration file: %w", err)
-	}
-
-	_, err = d.DB.Exec(string(script))
-	if err != nil {
-		return fmt.Errorf("migration execution failed: %w", err)
-	}
-
-	log.Println("Database migration completed successfully")
-	return nil
 }

@@ -13,11 +13,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Run migrations
-	if err := db.Migrate(); err != nil {
-		log.Fatal(err)
-	}
-
 	// Ensure the database connection is closed when the app exits
 	defer db.Close()
 

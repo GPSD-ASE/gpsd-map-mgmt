@@ -15,9 +15,7 @@ func SetupRouter(db *database.Database) *gin.Engine {
 	disasterZoneHandler := handlers.NewDisasterZoneHandler(db)
 
 	// Define API routes
-	r.POST("/zones", disasterZoneHandler.CreateDisasterZone)
 	r.GET("/zones", disasterZoneHandler.GetDisasterZones)
-	r.DELETE("/zones/:id", disasterZoneHandler.DeleteDisasterZone)
 
 	return r
 }
