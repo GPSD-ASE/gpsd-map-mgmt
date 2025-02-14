@@ -10,8 +10,8 @@ type MockGraphHopperService struct{}
 // GetRoute returns a dummy simple route response.
 func (m *MockGraphHopperService) GetRoute(origin, destination string) (services.RouteResponse, error) {
 	return services.RouteResponse{
-		Distance: 1000,
-		Time:     600,
+		// Distance: 1000,
+		// Time:     600,
 	}, nil
 }
 
