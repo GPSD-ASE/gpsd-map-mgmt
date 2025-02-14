@@ -12,14 +12,14 @@ import (
 // It now accepts both a database and a GraphHopper service.
 func SetupRouter(db *database.Database, ghService *services.GraphHopperService) *gin.Engine {
 	r := gin.Default()
-
+	dzService := services.NewDisasterZoneService(db.DB)
 	// Create disaster zone handler (using db)
 	disasterZoneHandler := handlers.NewDisasterZoneHandler(db)
 	r.GET("/zones", disasterZoneHandler.GetDisasterZones)
 
-	// Create routing handler (using the GraphHopper service)
-	routingHandler := handlers.NewRoutingHandler(ghService)
-	r.GET("/routing", routingHandler.GetRouting)
+	// Routing handler
+	routingHandler := handlers.NewRoutingHandler(ghService, dzService)
+	r.GET("/routing", routingHandler.GetSafeRouting)
 
 	// Evacuation endpoint (POST)
 	evacService := services.NewEvacuationService(db.DB, ghService) // assuming db.DB is *sql.DB

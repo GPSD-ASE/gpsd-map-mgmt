@@ -51,7 +51,7 @@ func NewDisasterZoneHandler(db database.DatabaseInterface) *DisasterZoneHandler 
 // @Failure      500  {object}  map[string]string  "Internal Server Error"
 // @Router       /zones [get]
 func (h *DisasterZoneHandler) GetDisasterZones(c *gin.Context) {
-	rows, err := h.DB.Query("SELECT i.incident_id as incident_id, t.type_name AS incident_name, i.latitude as latitude, i.longitude as longitude, i.severity_id as severity_id FROM incident i JOIN incident_type t ON i.type_id = t.type_id; ")
+	rows, err := h.DB.Query("SELECT i.incident_id as incident_id, t.type_name AS incident_name, i.latitude as latitude, i.longitude as longitude, i.severity_level_id as severity_id FROM gpsd_inc.incident i JOIN gpsd_inc.incident_type t ON i.incident_type_id = t.type_id; ")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch disaster zones"})
 		return

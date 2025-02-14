@@ -37,8 +37,12 @@ type RoutePath struct {
 
 // RouteResponse is the response from GraphHopper for a simple route request.
 type RouteResponse struct {
-	Distance float64 `json:"distance"`
-	Time     int     `json:"time"`
+	// Hints contains additional information or optimization hints from the routing engine.
+	Hints map[string]interface{} `json:"hints" example:"{\"visited_nodes.sum\": 100, \"visited_nodes.average\": 100}"`
+	// Info provides metadata about the routing request, such as processing time.
+	Info map[string]interface{} `json:"info" example:"{\"took\": 3, \"copyrights\": [\"GraphHopper\", \"OpenStreetMap contributors\"]}"`
+	// Paths is an array of route paths that describe the computed route in detail.
+	Paths []RoutePath `json:"paths"`
 }
 
 // EvacuationRouteResponse represents the full response from GraphHopper for an evacuation route.

@@ -1,7 +1,0 @@
-CREATE TABLE IF NOT EXISTS disaster_zones (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    latitude DOUBLE PRECISION NOT NULL,
-    longitude DOUBLE PRECISION NOT NULL,
-    radius DOUBLE PRECISION NOT NULL
-);

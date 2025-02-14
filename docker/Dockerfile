@@ -28,8 +28,6 @@ COPY --from=builder /app/gpsd-map-mgmt-svc .
 # Copy configuration files if needed
 COPY ../config/ config/
 
-COPY ../tables.sql .
-
 # Expose the application port
 EXPOSE 7000
 
