@@ -7,9 +7,6 @@ build-image:
 push-image:
 	docker push $(IMAGE_NAME):$(TAG)
 
-run-image:
-	docker run -d -p 7000:7000 --name test_container $(IMAGE_NAME):$(TAG)
-
 clean-image:
 	docker stop test_container || true
 	docker rm test_container || true
