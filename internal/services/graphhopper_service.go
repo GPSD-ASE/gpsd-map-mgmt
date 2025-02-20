@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -121,7 +122,11 @@ func (s *GraphHopperService) GetEvacuationRoute(dangerPoint, safePoint [2]float6
 func (s *GraphHopperService) GetSafeRoute(origin, destination string, zones []models.DisasterZone) (RouteResponse, error) {
 	// Build the custom model based on provided disaster zones.
 	customModel := BuildDisasterZonesCustomModel(zones)
-
+	custjsonb, err := json.Marshal(customModel)
+	if err != nil {
+		return RouteResponse{}, err
+	}
+	log.Println("Custom Model:", string(custjsonb))
 	// Use buildPoints to parse origin and destination.
 	points, err := buildPoints(origin, destination)
 	if err != nil {
@@ -134,13 +139,13 @@ func (s *GraphHopperService) GetSafeRoute(origin, destination string, zones []mo
 		"profile":        "car",
 		"locale":         "en",
 		"custom_model":   customModel,
-		"ch.disable":     true, // Disables speed mode for custom model usage.
+		"ch.disable":     true,
 		"instructions":   true,
 		"calc_points":    true,
 		"points_encoded": false,
 	}
 
-	jsonBytes, err := json.Marshal(requestPayload)
+	jsonBytes, _ := json.Marshal(requestPayload)
 	if err != nil {
 		return RouteResponse{}, err
 	}

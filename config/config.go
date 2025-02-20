@@ -13,6 +13,7 @@ var (
 	DB_USERNAME     string
 	DB_PASS         string
 	GRAPHHOPPER_KEY string
+	PORT            string
 )
 
 func LoadConfig() {
@@ -26,6 +27,7 @@ func LoadConfig() {
 	DB_USERNAME = os.Getenv("DATABASE_USERNAME")
 	JWT_SECRET = os.Getenv("JWT_SECRET")
 	GRAPHHOPPER_KEY = os.Getenv("GRAPHHOPPER_KEY")
+	PORT = os.Getenv("PORT")
 
 	if DB_URL == "" || JWT_SECRET == "" {
 		log.Fatal("Missing required environment variables")

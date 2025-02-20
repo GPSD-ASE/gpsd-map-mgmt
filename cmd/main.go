@@ -43,6 +43,6 @@ func main() {
 	// Add Swagger UI route. This will serve Swagger documentation at /swagger/index.html.
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	log.Println("Server running on port 7000")
-	http.ListenAndServe(":7000", r)
+	log.Println("Server running on port ", config.PORT)
+	http.ListenAndServe(":"+config.PORT, r)
 }
