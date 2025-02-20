@@ -14,7 +14,7 @@ func SetupRouter(db *database.Database, ghService *services.GraphHopperService) 
 	r := gin.Default()
 	dzService := services.NewDisasterZoneService(db.DB)
 	// Create disaster zone handler (using db)
-	disasterZoneHandler := handlers.NewDisasterZoneHandler(db)
+	disasterZoneHandler := handlers.NewDisasterZoneHandler(dzService)
 	r.GET("/zones", disasterZoneHandler.GetDisasterZones)
 
 	// Routing handler
