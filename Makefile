@@ -6,8 +6,3 @@ build-image:
 
 push-image:
 	docker push $(IMAGE_NAME):$(TAG)
-
-clean-image:
-	docker stop test_container || true
-	docker rm test_container || true
-
