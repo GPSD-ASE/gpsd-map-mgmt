@@ -1,13 +1,17 @@
+// @title Disaster Response Map API
+// @version 1.0.0
+// @description API for disaster response, including retrieval of disaster zones, routing between two points, and calculating evacuation routes.
+// @contact.name Rokas Paulauskas
+// @contact.email paulausr@tcd.ie
+// @BasePath /
 package services
 
 import "math"
 
-// BuildCirclePolygon returns a GeoJSON polygon approximating a circle centered at (centerLat, centerLon)
-// with the given radius in meters. Coordinates are in [longitude, latitude] order.
 func BuildCirclePolygon(centerLat, centerLon, radius float64) [][][]float64 {
 	const (
-		earthRadius = 6371000 // in meters
-		numPoints   = 36      // Increase for smoother circle
+		earthRadius = 6371000
+		numPoints   = 36
 	)
 	angleStep := 2 * math.Pi / numPoints
 	var ring [][]float64

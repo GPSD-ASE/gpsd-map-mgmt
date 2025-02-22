@@ -34,13 +34,11 @@ func main() {
 	}
 	defer db.Close()
 
-	// Create GraphHopper service using the API key from config
 	ghService := services.NewGraphHopperService(config.GRAPHHOPPER_KEY, config.GRAPHHOPPER_URL)
+	tfService := services.NewTrafficService(config.TOMTOM_URL, config.TOMTOM_API_KEY)
 
-	// Initialize router with both database and GraphHopper service
-	r := router.SetupRouter(db, ghService)
+	r := router.SetupRouter(db, ghService, tfService)
 
-	// Add Swagger UI route. This will serve Swagger documentation at /swagger/index.html.
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Println("Server running on port ", config.PORT)

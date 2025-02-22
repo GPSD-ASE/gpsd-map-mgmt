@@ -1,3 +1,9 @@
+// @title Disaster Response Map API
+// @version 1.0.0
+// @description API for disaster response, including retrieval of disaster zones, routing between two points, and calculating evacuation routes.
+// @contact.name Rokas Paulauskas
+// @contact.email paulausr@tcd.ie
+// @BasePath /
 package handlers
 
 import (
@@ -8,7 +14,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RoutingHandler handles route requests.
 type RoutingHandler struct {
 	GHService services.GraphHopperServiceInterface
 	DZService services.DisasterZoneServiceInterface
@@ -44,14 +49,12 @@ func (h *RoutingHandler) GetSafeRouting(c *gin.Context) {
 		return
 	}
 
-	// Fetch disaster zones from the database using the Disaster Zone Service.
 	zones, err := h.DZService.GetDisasterZones()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch disaster zones"})
 		return
 	}
 
-	// Calculate a safe route avoiding disaster zones.
 	route, err := h.GHService.GetSafeRoute(origin, destination, zones)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch safe route"})

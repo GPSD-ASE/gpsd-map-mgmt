@@ -1,0 +1,214 @@
+basePath: /
+definitions:
+  handlers.DisasterZone:
+    properties:
+      incident_id:
+        description: The unique identifier of the incident.
+        example: 1
+        type: integer
+      incident_name:
+        description: The name of the incident.
+        example: Flood Zone
+        type: string
+      latitude:
+        description: The latitude of the incident location.
+        example: 53.349805
+        type: number
+      longitude:
+        description: The longitude of the incident location.
+        example: -6.26031
+        type: number
+      radius:
+        description: The calculated radius for the disaster zone.
+        example: 30.5
+        type: number
+    type: object
+  handlers.EvacuationRequest:
+    type: object
+  services.EvacuationRouteResponse:
+    properties:
+      hints:
+        additionalProperties: true
+        type: object
+      info:
+        additionalProperties: true
+        type: object
+      paths:
+        items:
+          $ref: '#/definitions/services.RoutePath'
+        type: array
+    type: object
+  services.GeoJSON:
+    properties:
+      coordinates:
+        description: can be []float64 or [][]float64 depending on the geometry
+      type:
+        type: string
+    type: object
+  services.Instruction:
+    properties:
+      distance:
+        type: number
+      heading:
+        type: number
+      interval:
+        items:
+          type: integer
+        type: array
+      sign:
+        type: integer
+      street_name:
+        type: string
+      text:
+        type: string
+      time:
+        type: integer
+    type: object
+  services.RoutePath:
+    properties:
+      ascend:
+        type: number
+      bbox:
+        items:
+          type: number
+        type: array
+      descend:
+        type: number
+      details:
+        additionalProperties: true
+        type: object
+      distance:
+        type: number
+      instructions:
+        items:
+          $ref: '#/definitions/services.Instruction'
+        type: array
+      legs:
+        items: {}
+        type: array
+      points:
+        $ref: '#/definitions/services.GeoJSON'
+      points_encoded:
+        type: boolean
+      snapped_waypoints:
+        $ref: '#/definitions/services.GeoJSON'
+      time:
+        type: integer
+      transfers:
+        type: integer
+      weight:
+        type: number
+    type: object
+  services.RouteResponse:
+    properties:
+      distance:
+        type: number
+      time:
+        type: integer
+    type: object
+host: localhost:7000
+info:
+  contact:
+    email: paulausr@tcd.ie
+    name: Rokas Paulauskas
+  description: API for disaster response, including retrieval of disaster zones, routing
+    between two points, and calculating evacuation routes.
+  title: Disaster Response Map API
+  version: 1.0.0
+paths:
+  /evacuation:
+    post:
+      consumes:
+      - application/json
+      description: Calculates an evacuation route from a danger point to a safe zone.
+        If safe_point is omitted, the API determines the nearest safe zone matching
+        the incident type.
+      parameters:
+      - description: Evacuation Request
+        in: body
+        name: evacuationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.EvacuationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.EvacuationRouteResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Calculate Evacuation Route
+      tags:
+      - Evacuation
+  /routing:
+    get:
+      description: Calculates a route between two points using the GraphHopper service.
+      parameters:
+      - description: Origin coordinates in latitude,longitude format
+        example: '"53.349805,-6.26031"'
+        in: query
+        name: origin
+        required: true
+        type: string
+      - description: Destination coordinates in latitude,longitude format
+        example: '"53.3478,-6.2597"'
+        in: query
+        name: destination
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.RouteResponse'
+        "400":
+          description: Missing required parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to fetch route
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Calculate Route
+      tags:
+      - Routing
+  /zones:
+    get:
+      description: Retrieves a list of disaster zones from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handlers.DisasterZone'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Retrieve Disaster Zones
+      tags:
+      - DisasterZone
+swagger: "2.0"
