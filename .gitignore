@@ -60,8 +60,6 @@ docker-compose.override.yml
 *.dockerfile
 
 # Kubernetes
-*.yaml
-*.yml
 .kube/
 
 # GitHub Actions (temporary workflow runs)
