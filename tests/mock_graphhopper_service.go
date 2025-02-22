@@ -4,18 +4,12 @@ import (
 	"disaster-response-map-api/internal/services"
 )
 
-// MockGraphHopperService implements the GraphHopperServiceInterface.
 type MockGraphHopperService struct{}
 
-// GetRoute returns a dummy simple route response.
 func (m *MockGraphHopperService) GetRoute(origin, destination string) (services.RouteResponse, error) {
-	return services.RouteResponse{
-		// Distance: 1000,
-		// Time:     600,
-	}, nil
+	return services.RouteResponse{}, nil
 }
 
-// GetEvacuationRoute returns a dummy full evacuation route response.
 func (m *MockGraphHopperService) GetEvacuationRoute(dangerPoint, safePoint [2]float64) (services.EvacuationRouteResponse, error) {
 	return services.EvacuationRouteResponse{
 		Hints: map[string]interface{}{"sample_hint": "value"},

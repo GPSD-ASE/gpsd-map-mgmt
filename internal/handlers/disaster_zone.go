@@ -13,7 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// DisasterZoneHandler handles disaster zone requests.
 type DisasterZoneHandler struct {
 	DZService services.DisasterZoneServiceInterface
 }
