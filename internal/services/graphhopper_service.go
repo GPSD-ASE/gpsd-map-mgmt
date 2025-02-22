@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -25,10 +24,10 @@ type GraphHopperService struct {
 }
 
 // NewGraphHopperService creates a new GraphHopperService with the provided API key.
-func NewGraphHopperService(apiKey string) *GraphHopperService {
+func NewGraphHopperService(apiKey string, url string) *GraphHopperService {
 	return &GraphHopperService{
 		APIKey:  apiKey,
-		BaseURL: "https://graphhopper.com/api/1/route",
+		BaseURL: url,
 	}
 }
 
@@ -122,11 +121,6 @@ func (s *GraphHopperService) GetEvacuationRoute(dangerPoint, safePoint [2]float6
 func (s *GraphHopperService) GetSafeRoute(origin, destination string, zones []models.DisasterZone) (RouteResponse, error) {
 	// Build the custom model based on provided disaster zones.
 	customModel := BuildDisasterZonesCustomModel(zones)
-	custjsonb, err := json.Marshal(customModel)
-	if err != nil {
-		return RouteResponse{}, err
-	}
-	log.Println("Custom Model:", string(custjsonb))
 	// Use buildPoints to parse origin and destination.
 	points, err := buildPoints(origin, destination)
 	if err != nil {

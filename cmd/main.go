@@ -35,7 +35,7 @@ func main() {
 	defer db.Close()
 
 	// Create GraphHopper service using the API key from config
-	ghService := services.NewGraphHopperService(config.GRAPHHOPPER_KEY)
+	ghService := services.NewGraphHopperService(config.GRAPHHOPPER_KEY, config.GRAPHHOPPER_URL)
 
 	// Initialize router with both database and GraphHopper service
 	r := router.SetupRouter(db, ghService)
