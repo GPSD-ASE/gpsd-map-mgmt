@@ -14,12 +14,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// EvacuationServiceInterface defines the method used by the handler.
 type EvacuationServiceInterface interface {
 	GetEvacuationRoute(dangerPoint [2]float64, incidentTypeID int, safePoint *[2]float64) (services.EvacuationRouteResponse, error)
 }
 
-// EvacuationHandler handles evacuation route requests.
 type EvacuationHandler struct {
 	Service EvacuationServiceInterface
 }
@@ -35,15 +33,9 @@ func NewEvacuationHandler(service EvacuationServiceInterface) *EvacuationHandler
 // EvacuationRequest defines the expected JSON payload for an evacuation request.
 // swagger:model EvacuationRequest
 type EvacuationRequest struct {
-	// Coordinates of the danger zone in [latitude, longitude] format.
-	// example: [53.349805, -6.26031]
-	DangerPoint [2]float64 `json:"danger_point" example:"[53.349805, -6.26031]"`
-	// Incident type ID used to match a safe zone in the database.
-	// example: 3
-	IncidentTypeID int `json:"incident_type_id" example:"3"`
-	// (Optional) Coordinates of the safe zone in [latitude, longitude] format.
-	// example: [53.3440, -6.2670]
-	SafePoint *[2]float64 `json:"safe_point,omitempty" example:"[53.3440, -6.2670]"`
+	DangerPoint    [2]float64  `json:"danger_point" example:"[53.349805, -6.26031]"`
+	IncidentTypeID int         `json:"incident_type_id" example:"3"`
+	SafePoint      *[2]float64 `json:"safe_point,omitempty" example:"[53.3440, -6.2670]"`
 }
 
 // GetEvacuationRoute godoc

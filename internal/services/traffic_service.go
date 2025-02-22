@@ -1,3 +1,9 @@
+// @title Disaster Response Map API
+// @version 1.0.0
+// @description API for disaster response, including retrieval of disaster zones, routing between two points, and calculating evacuation routes.
+// @contact.name Rokas Paulauskas
+// @contact.email paulausr@tcd.ie
+// @BasePath /
 package services
 
 import (
@@ -7,20 +13,27 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-// TrafficServiceInterface defines the methods for retrieving traffic data.
 type TrafficServiceInterface interface {
 	GetTrafficData(lat, lon string) ([]byte, error)
 }
 
-// TrafficService implements TrafficServiceInterface.
 type TrafficService struct {
 	APIKey  string
 	BaseURL string
 }
+
 type TrafficResponse struct {
+	FlowSegmentData struct {
+		Coordinates        [][]float64 `json:"coordinates"`
+		CurrentSpeed       float64     `json:"currentSpeed"`
+		FreeFlowSpeed      float64     `json:"freeFlowSpeed"`
+		CurrentTravelTime  int         `json:"currentTravelTime"`
+		FreeFlowTravelTime int         `json:"freeFlowTravelTime"`
+		Confidence         int         `json:"confidence"`
+		RoadClosure        bool        `json:"roadClosure"`
+	} `json:"flowSegmentData"`
 }
 
-// NewTrafficService creates a new instance of TrafficService.
 func NewTrafficService(url string, apiKey string) *TrafficService {
 	return &TrafficService{
 		APIKey:  apiKey,
@@ -28,11 +41,8 @@ func NewTrafficService(url string, apiKey string) *TrafficService {
 	}
 }
 
-// GetTrafficData fetches traffic data from the TomTom API using provided latitude and longitude.
 func (s *TrafficService) GetTrafficData(lat, lon string) ([]byte, error) {
-	// Build the TomTom API URL.
 	url := fmt.Sprintf("%s?key=%s&point=%s,%s", s.BaseURL, s.APIKey, lat, lon)
-
 	client := resty.New()
 	resp, err := client.R().Get(url)
 	if err != nil {

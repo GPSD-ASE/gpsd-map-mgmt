@@ -1,3 +1,9 @@
+// @title Disaster Response Map API
+// @version 1.0.0
+// @description API for disaster response, including retrieval of disaster zones, routing between two points, and calculating evacuation routes.
+// @contact.name Rokas Paulauskas
+// @contact.email paulausr@tcd.ie
+// @BasePath /
 package services
 
 import (
@@ -6,8 +12,6 @@ import (
 	"strconv"
 )
 
-// BuildDisasterZonesCustomModel builds a custom model for GraphHopper based on a slice of disaster zones.
-// Each disaster zone is represented as a GeoJSON polygon, and a priority rule is added to block routes through that area.
 func BuildDisasterZonesCustomModel(zones []models.DisasterZone) map[string]interface{} {
 	features := []map[string]interface{}{}
 	priorityRules := []map[string]interface{}{}

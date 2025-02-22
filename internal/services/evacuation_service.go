@@ -1,3 +1,9 @@
+// @title Disaster Response Map API
+// @version 1.0.0
+// @description API for disaster response, including retrieval of disaster zones, routing between two points, and calculating evacuation routes.
+// @contact.name Rokas Paulauskas
+// @contact.email paulausr@tcd.ie
+// @BasePath /
 package services
 
 import (
@@ -5,13 +11,11 @@ import (
 	"fmt"
 )
 
-// EvacuationService encapsulates logic for determining a safe zone and fetching an evacuation route.
 type EvacuationService struct {
 	DB *sql.DB
 	GH GraphHopperServiceInterface
 }
 
-// NewEvacuationService creates a new EvacuationService.
 func NewEvacuationService(db *sql.DB, gh GraphHopperServiceInterface) *EvacuationService {
 	return &EvacuationService{
 		DB: db,
@@ -19,8 +23,6 @@ func NewEvacuationService(db *sql.DB, gh GraphHopperServiceInterface) *Evacuatio
 	}
 }
 
-// getNearestSafeZone queries the safe_zone table for the nearest safe zone matching the incident type.
-// This query uses the haversine formula calculation directly in SQL for more precise distance computation.
 func (s *EvacuationService) getNearestSafeZone(dangerPoint [2]float64, incidentTypeID int) (zoneLat, zoneLon float64, err error) {
 	query := `
         SELECT zone_lat, zone_lon
@@ -40,8 +42,6 @@ func (s *EvacuationService) getNearestSafeZone(dangerPoint [2]float64, incidentT
 	return zoneLat, zoneLon, nil
 }
 
-// GetEvacuationRoute returns the evacuation route from the danger point to a safe zone.
-// If safePoint is nil, it finds the nearest safe zone for the given incident type.
 func (s *EvacuationService) GetEvacuationRoute(dangerPoint [2]float64, incidentTypeID int, safePoint *[2]float64) (EvacuationRouteResponse, error) {
 	var destination [2]float64
 	if safePoint == nil {
