@@ -14,6 +14,9 @@ var (
 	DB_PASS         string
 	GRAPHHOPPER_KEY string
 	PORT            string
+	TOMTOM_API_KEY  string
+	GRAPHHOPPER_URL string
+	TOMTOM_URL      string
 )
 
 func LoadConfig() {
@@ -28,6 +31,9 @@ func LoadConfig() {
 	JWT_SECRET = os.Getenv("JWT_SECRET")
 	GRAPHHOPPER_KEY = os.Getenv("GRAPHHOPPER_KEY")
 	PORT = os.Getenv("PORT")
+	TOMTOM_API_KEY = os.Getenv("TOMTOM_API_KEY")
+	GRAPHHOPPER_URL = os.Getenv("GRAPHHOPPER_URL")
+	TOMTOM_URL = os.Getenv("TOMTOM_URL")
 
 	if DB_URL == "" || JWT_SECRET == "" {
 		log.Fatal("Missing required environment variables")
