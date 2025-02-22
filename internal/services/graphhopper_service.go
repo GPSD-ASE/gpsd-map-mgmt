@@ -139,7 +139,7 @@ func (s *GraphHopperService) GetSafeRoute(origin, destination string, zones []mo
 		"points_encoded": false,
 	}
 
-	jsonBytes, _ := json.Marshal(requestPayload)
+	jsonBytes, err := json.Marshal(requestPayload)
 	if err != nil {
 		return RouteResponse{}, err
 	}

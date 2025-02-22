@@ -1,5 +1,5 @@
 # 🏗 Stage 1: Build the Go Application
-FROM golang:1.23 AS builder
+FROM golang:1.24 AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN go mod tidy
 COPY ../ ./
 
 # Build the Go application
-RUN go build -o gpsd-map-mgmt-svc ./cmd/main.go
+RUN go build -o gpsd-map-mgmt ./cmd/main.go
 
 # 🏗 Stage 2: Use Debian Bookworm (latest GLIBC version)
 FROM debian:bookworm
@@ -20,10 +20,10 @@ FROM debian:bookworm
 WORKDIR /app
 
 # Install necessary libraries including latest GLIBC
-RUN apt-get update && apt-get install -y ca-certificates libc6
+RUN apt-get update && apt-get install -y curl lsof net-tools ca-certificates libc6 iputils-ping
 
 # Copy the compiled binary from the builder stage
-COPY --from=builder /app/gpsd-map-mgmt-svc .
+COPY --from=builder /app/gpsd-map-mgmt .
 
 # Copy configuration files if needed
 COPY ../config/ config/
@@ -32,4 +32,4 @@ COPY ../config/ config/
 EXPOSE 7000
 
 # Start the application
-CMD ["./gpsd-map-mgmt-svc"]
+CMD ["./gpsd-map-mgmt"]

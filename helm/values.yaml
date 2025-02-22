@@ -1,0 +1,35 @@
+namespace: gpsd
+
+replicaCount: 1
+
+image:
+  repository: gpsd/gpsd-map-mgmt
+  tag: "latest"
+  pullPolicy: Always
+
+service:
+  - name: http
+    type: ClusterIP
+    port: 7000
+    targetPort: 7000
+
+env:
+  VAULT_ADDR: "https://152.53.124.121:8200"
+  VAULT_AUTH_METHOD: "kubernetes"
+  VAULT_ROLE: "gpsd-map-mgmt"
+  PORT: "7000"
+  GIN_MODE: "release"
+  GRAPHHOPPER_URL: "https://graphhopper.com/api/1/route"
+  TOMTOM_URL: "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
+
+serviceAccount:
+  create: true
+  name: gpsd-map-mgmt-sa
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
