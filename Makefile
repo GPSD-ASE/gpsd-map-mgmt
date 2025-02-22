@@ -9,13 +9,13 @@ develop: helm-uninstall build-image push-image helm
 docker: build-image push-image
 
 build-image:
-	docker build -f docker/Dockerfile -t $(IMAGE_NAME):$(TAG) .
+	docker build -f docker/Dockerfile --tag $(IMAGE_NAME):$(TAG) --platform linux/amd64 .
 
 push-image:
 	docker push $(IMAGE_NAME):$(TAG)
 
 run-image:
-	docker run -p 7000:7000 $(DEPLOYMENT)
+	docker run -p 7000:7000 $(IMAGE_NAME):$(TAG)
 
 clean-image:
 	docker rmi $(docker images --filter "dangling=true" -q) -f
