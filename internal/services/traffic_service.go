@@ -17,6 +17,8 @@ type TrafficService struct {
 	APIKey  string
 	BaseURL string
 }
+type TrafficResponse struct {
+}
 
 // NewTrafficService creates a new instance of TrafficService.
 func NewTrafficService(url string, apiKey string) *TrafficService {
