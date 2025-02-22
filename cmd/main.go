@@ -12,22 +12,18 @@ import (
 	"net/http"
 
 	"disaster-response-map-api/config"
+	_ "disaster-response-map-api/docs"
 	"disaster-response-map-api/internal/services"
 	"disaster-response-map-api/pkg/database"
 	"disaster-response-map-api/pkg/router"
-
-	// Swagger UI packages:
-	_ "disaster-response-map-api/docs"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
-	// Load environment configuration including GRAPHHOPPER_KEY
 	config.LoadConfig()
 
-	// Initialize database connection
 	db, err := database.NewDatabase()
 	if err != nil {
 		log.Fatal(err)
