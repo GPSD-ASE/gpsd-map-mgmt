@@ -7,7 +7,6 @@ import (
 	"os"
 
 	vault "github.com/hashicorp/vault/api"
-	"github.com/joho/godotenv"
 )
 
 var (
@@ -23,10 +22,10 @@ var (
 )
 
 func LoadConfig() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("Warning: No .env file found, using system env variables")
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Println("Warning: No .env file found, using system env variables")
+	// }
 	if os.Getenv("VAULT_TOKEN") != "" {
 		vaultSecrets, err := loadVaultSecrets()
 		if err != nil {

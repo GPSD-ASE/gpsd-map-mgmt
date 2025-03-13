@@ -25,7 +25,7 @@ func NewDisasterZoneService(db *sql.DB) *DisasterZoneService {
 }
 
 func (s *DisasterZoneService) GetDisasterZones() ([]models.DisasterZone, error) {
-	rows, err := s.DB.Query("SELECT t.type_name AS incident_name, i.latitude as latitude, i.longitude as longitude, i.severity_level_id as severity_id FROM gpsd_inc.incident i JOIN gpsd_inc.incident_type t ON i.incident_type_id = t.type_id; ")
+	rows, err := s.DB.Query("SELECT t.type_name AS incident_name, i.latitude as latitude, i.longitude as longitude, i.severity_id as severity_id FROM incident i JOIN incident_type t ON i.type_id = t.type_id; ")
 	if err != nil {
 		log.Printf("Error querying disaster zones: %v", err)
 		return nil, err
