@@ -13,6 +13,8 @@ jobs:
       # Step 1: Checkout the Code
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       # Step 2: Extract Git Tag for Versioning
       - name: Extract Git Tag
