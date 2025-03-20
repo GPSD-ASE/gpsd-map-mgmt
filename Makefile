@@ -5,6 +5,7 @@ TAG ?= latest  # If no tag is provided, default to 'latest'
 LOCAL_CHART_NAME = helm
 REMOTE_CHART_REPOSITORY = gpsd-ase.github.io
 SERVICE_NAME = $(DEPLOYMENT)
+TAG_VERSION=$(shell echo $(TAG) | sed 's/^v//')
 
 # Use `make develop` for local testing
 develop: helm-uninstall build-image push-image helm
@@ -44,7 +45,7 @@ gh-pages-publish:
 	git fetch origin gh-pages
 	git checkout gh-pages
 	ls -l /tmp
-	cp /tmp/$(SERVICE_NAME)-$(TAG).tgz /tmp/index.yaml .
+	cp /tmp/$(SERVICE_NAME)-$(TAG_VERSION).tgz /tmp/index.yaml .
 	git add .
 	git commit -m "fix: commit to update Github Pages"
 	git push origin gh-pages -f
