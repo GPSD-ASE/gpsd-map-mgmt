@@ -34,6 +34,8 @@ jobs:
 
       - name: Execute Makefile Command
         run: make gh-pages-publish
+      - name: Checkout Code
+        uses: actions/checkout@v3
       - name: Trigger Remote SSH Workflow
         run: |
           gh workflow run deploy-helm.yml
