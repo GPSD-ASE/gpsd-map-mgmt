@@ -1,0 +1,24 @@
+name: Deploy Helm Chart on Remote Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy_helm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.REMOTE_SERVER }} >> ~/.ssh/known_hosts
+
+      - name: Connect to Remote Server & Update Helm Repo
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.REMOTE_SERVER }} << 'EOF'
+            cd /srv/shared
+            helm repo add ${{ secrets.SERVICE_NAME }} https://${{ secrets.REMOTE_CHART_REPOSITORY }}/${{ secrets.SERVICE_NAME }}/            helm repo update
+            helm repo list
+          EOF

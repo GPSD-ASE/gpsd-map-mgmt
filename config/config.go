@@ -90,7 +90,7 @@ func loadVaultSecrets() (map[string]interface{}, error) {
 	}
 	client.SetToken(token)
 
-	secret, err := client.KVv2("secret").Get(context.Background(), "map-service")
+	secret, err := client.KVv2("secret").Get(context.Background(), "gpsd/map-mgmt")
 	if err != nil {
 		return nil, fmt.Errorf("failed to read secret from vault: %w", err)
 	}

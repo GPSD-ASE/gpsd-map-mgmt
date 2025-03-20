@@ -38,3 +38,12 @@ jobs:
       - name: Push Docker Image
         run: make push-image TAG=${{ env.TAG_VERSION }}
 
+  trigger-update:
+      needs: docker_process
+      runs-on: ubuntu-latest
+      steps:
+        - name: Trigger Child Workflow
+          run: |
+            gh workflow run update-chart.yml -f TAG_VERSION=${{ env.TAG_VERSION }}
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
