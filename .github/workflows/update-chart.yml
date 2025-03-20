@@ -1,43 +1,44 @@
 name: Update Helm Chart and Execute Makefile
 
 on:
-  workflow_dispatch:
-    inputs:
-      TAG_VERSION:
-        description: "Docker Image Tag"
-        required: true
+  workflow_run:
+    workflows: ["Docker Build, Push, Run using Makefile"]
+    types:
+        - completed
+
+permissions:
+  contents: write 
 
 jobs:
   update_chart:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the Code
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Step 2: Extract Git Tag for Versioning
+      - name: Extract Git Tag
+        id: tag
+        run: echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
       - name: Update values.yaml
         run: |
-          sed -i 's|tag: ".*"|tag: "${{ github.event.inputs.TAG_VERSION }}"|' helm/values.yaml
+          sed -i 's|tag: ".*"|tag: "${{ env.TAG_VERSION }}"|' helm/values.yaml
 
       - name: Update Chart.yaml
         run: |
-          NEW_VERSION=$(awk -F': ' '/version:/ {print $2+0.1}' helm/Chart.yaml)
-          sed -i "s/version:.*/version: $NEW_VERSION/" helm/Chart.yaml
+            NEW_VERSION=$(echo "${{ env.TAG_VERSION }}" | sed 's/v//')
+            sed -i "s/^version:.*/version: $NEW_VERSION/" helm/Chart.yaml
 
       - name: Commit Changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add helm/values.yaml helm/Chart.yaml
-          git commit -m "Update Helm chart to tag ${{ github.event.inputs.TAG_VERSION }}"
+          git commit -m "Update Helm chart to tag ${{ env.TAG_VERSION }}"
           git push origin main
 
       - name: Execute Makefile Command
         run: make gh-pages-publish
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - name: Trigger Remote SSH Workflow
-        run: |
-          gh workflow run deploy-helm.yml
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
