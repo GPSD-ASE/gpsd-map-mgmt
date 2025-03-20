@@ -41,6 +41,7 @@ func LoadConfig() {
 			GRAPHHOPPER_URL = getString(vaultSecrets, "GRAPHHOPPER_URL", os.Getenv("GRAPHHOPPER_URL"))
 			TOMTOM_URL = getString(vaultSecrets, "TOMTOM_URL", os.Getenv("TOMTOM_URL"))
 		}
+		log.Printf("DEUBG - All vault secrets : %v", vaultSecrets)
 	}
 	if DB_URL == "" {
 		DB_URL = os.Getenv("DATABASE_URL")
