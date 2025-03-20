@@ -42,6 +42,8 @@ jobs:
       needs: docker_process
       runs-on: ubuntu-latest
       steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
         - name: Trigger Child Workflow
           run: |
             gh workflow run update-chart.yml -f TAG_VERSION=${{ env.TAG_VERSION }}
