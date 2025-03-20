@@ -29,7 +29,7 @@ jobs:
 
       - name: Update Chart.yaml
         run: |
-            NEW_VERSION=$(echo "${{ env.TAG_VERSION }}" | sed 's/v//')
+            NEW_VERSION=$(echo "${{ env.TAG_VERSION }}" | sed 's/^v//')
             sed -i "s/^version:.*/version: $NEW_VERSION/" helm/Chart.yaml
 
       - name: Commit Changes
