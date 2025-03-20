@@ -1,7 +1,10 @@
 name: Deploy Helm Chart on Remote Server
 
 on:
-  workflow_dispatch:
+    workflow_run:
+      workflows: ["Update Helm Chart and Execute Makefile"]
+      types:
+          - completed
 
 jobs:
   deploy_helm:
@@ -19,6 +22,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.REMOTE_SERVER }} << 'EOF'
             cd /srv/shared
-            helm repo add ${{ secrets.SERVICE_NAME }} https://${{ secrets.REMOTE_CHART_REPOSITORY }}/${{ secrets.SERVICE_NAME }}/            helm repo update
+            helm repo add ${{ secrets.SERVICE_NAME }} https://${{ secrets.REMOTE_CHART_REPOSITORY }}/${{ secrets.SERVICE_NAME }}/            
+            helm repo update
             helm repo list
           EOF
