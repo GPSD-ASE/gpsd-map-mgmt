@@ -41,6 +41,7 @@ gh-pages-publish:
 	rm -rf /tmp/gpsd-* /tmp/index.yaml
 	helm package ./$(LOCAL_CHART_NAME) -d /tmp 
 	helm repo index /tmp --url https://$(REMOTE_CHART_REPOSITORY)/$(SERVICE_NAME)/ --merge /tmp/index.yaml
+	git fetch origin gh-pages
 	git checkout gh-pages
 	cp /tmp/$(SERVICE_NAME)-$(TAG).tgz /tmp/index.yaml .
 	git add .
