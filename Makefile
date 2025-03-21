@@ -45,7 +45,7 @@ gh-pages-publish:
 	git fetch origin gh-pages
 	git checkout gh-pages
 	ls -l /tmp
-	cp /tmp/$(SERVICE_NAME)-$(TAG_VERSION).tgz /tmp/index.yaml .
+	cp /tmp/$(SERVICE_NAME)-0.0.15.tgz /tmp/index.yaml .
 	git add .
 	git commit -m "fix: commit to update Github Pages"
 	git push origin gh-pages -f
