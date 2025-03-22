@@ -3,12 +3,12 @@ entries:
   gpsd-map-mgmt:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-03-22T13:34:01.485974Z"
+    created: "2025-03-22T13:44:48.934417Z"
     description: A Helm chart for deploying the GPSD Maps Management service.
-    digest: 6b7c90d8950f2c0be11bbccac0c33400af18b66566036fee3ea10d32b47d6947
+    digest: 8c70bb710c28b68f774a48db0f3561d1f585f7b41debc6e9a40b47729ccc4e67
     name: gpsd-map-mgmt
     type: application
     urls:
     - https://gpsd-ase.github.io/gpsd-map-mgmt/gpsd-map-mgmt-0.0.16.tgz
     version: 0.0.16
-generated: "2025-03-22T13:34:01.485637Z"
+generated: "2025-03-22T13:44:48.933981Z"
