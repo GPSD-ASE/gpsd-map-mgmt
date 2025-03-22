@@ -2,6 +2,7 @@ TAG ?= 0.0.16  # If no tag is provided, default to 'latest'
 NAMESPACE = gpsd
 DEPLOYMENT = gpsd-map-mgmt
 SERVICE_NAME = $(DEPLOYMENT)
+IMAGE_NAME = $(NAMESPACE)/$(DEPLOYMENT)
 CHART_DIRECTORY = helm
 LOCAL_CHART_NAME = $(shell ls /tmp/$(DEPLOYMENT)-*.tgz)
 LOCAL_INDEX_FILE = /tmp/index.yaml
