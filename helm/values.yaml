@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: gpsd/gpsd-map-mgmt
-  tag: "v0.0.15"
+  tag: "v0.0.16"
   pullPolicy: Always
 
 service:
@@ -14,10 +14,11 @@ service:
     targetPort: 7000
 
 env:
+  MAP_MGMT_ENV: "TEST"
+  MAP_MGMT_APP_PORT: "7000"
   VAULT_ADDR: "http://vault.vault.svc.cluster.local:8200"
   VAULT_AUTH_METHOD: "kubernetes"
   VAULT_ROLE: "gpsd-map-mgmt"
-  PORT: "7000"
   GIN_MODE: "release"
   GRAPHHOPPER_URL: "https://graphhopper.com/api/1/route"
   TOMTOM_URL: "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"

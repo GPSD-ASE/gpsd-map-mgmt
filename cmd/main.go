@@ -37,6 +37,6 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	log.Println("Server running on port ", config.PORT)
-	http.ListenAndServe(":"+config.PORT, r)
+	log.Println("Server running on port ", config.MAP_MGMT_APP_PORT)
+	http.ListenAndServe(":"+config.MAP_MGMT_APP_PORT, r)
 }
