@@ -35,9 +35,9 @@ func (d *Database) Close() error {
 func NewDatabase() (*Database, error) {
 	config.LoadConfig()
 
-	dbURL := config.DB_URL
+	dbURL := config.MAP_MGMT_DB_HOST
 	if !strings.Contains(dbURL, "@") {
-		dbURL = fmt.Sprintf("postgres://%s:%s@%s", config.DB_USERNAME, config.DB_PASS, dbURL[11:])
+		dbURL = fmt.Sprintf("postgres://%s:%s@%s", config.MAP_MGMT_DB_USER, config.MAP_MGMT_DB_PASS, dbURL[11:])
 	}
 	if dbURL == "" {
 		return nil, fmt.Errorf("DATABASE_URL is not set")

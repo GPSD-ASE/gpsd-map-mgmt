@@ -9,7 +9,6 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/vault/api v1.16.0
-	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/stretchr/testify v1.10.0
 	github.com/swaggo/files v1.0.1
