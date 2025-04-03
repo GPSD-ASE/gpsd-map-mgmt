@@ -1,4 +1,4 @@
-name: GPSD User Management CI/CD Pipeline
+name: GPSD Map Management CI/CD Pipeline
 
 on:
   push:
