@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.18] - 2025-04-03
+## [0.0.19] - 2025-04-03
 
 
 ### Fixed
-c4e4445 fix: change release pipeline name
+529dd6d fix: change user to map
 

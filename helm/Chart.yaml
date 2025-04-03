@@ -2,5 +2,5 @@ apiVersion: v2
 name: gpsd-map-mgmt
 description: A Helm chart for deploying the GPSD Maps Management service.
 type: application
-version: 0.0.18
+version: 0.0.19
 appVersion: "1.0.0"
