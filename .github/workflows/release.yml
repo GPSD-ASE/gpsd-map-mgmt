@@ -123,15 +123,15 @@ jobs:
           context: .
           push: true
           tags: |
-            gpsd/gpsd-user-mgmt:latest
-            gpsd/gpsd-user-mgmt:v${{ needs.check-version.outputs.new_version }}
+            gpsd/gpsd-map-mgmt:latest
+            gpsd/gpsd-map-mgmt:v${{ needs.check-version.outputs.new_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       
       - name: Scan image for vulnerabilities
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'gpsd/gpsd-user-mgmt:v${{ needs.check-version.outputs.new_version }}'
+          image-ref: 'gpsd/gpsd-map-mgmt:v${{ needs.check-version.outputs.new_version }}'
           format: 'table'
           exit-code: '0'  # Don't fail for now, just report
           ignore-unfixed: true
@@ -162,7 +162,7 @@ jobs:
         run: |
           mkdir -p /tmp/gpsd/
           helm package ./helm -d /tmp/gpsd/
-          helm repo index /tmp/gpsd --url https://gpsd-ase.github.io/gpsd-user-mgmt/ --merge /tmp/gpsd/index.yaml
+          helm repo index /tmp/gpsd --url https://gpsd-ase.github.io/gpsd-map-mgmt/ --merge /tmp/gpsd/index.yaml
 
       - name: Publish to GitHub Pages
         run: |
