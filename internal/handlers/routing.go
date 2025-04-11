@@ -49,7 +49,7 @@ func (h *RoutingHandler) GetSafeRouting(c *gin.Context) {
 		return
 	}
 
-	zones, err := h.DZService.GetDisasterZones()
+	zones, err := h.DZService.GetActiveDisasterZones()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch disaster zones"})
 		return
