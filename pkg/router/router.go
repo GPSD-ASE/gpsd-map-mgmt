@@ -29,5 +29,8 @@ func SetupRouter(db *database.Database, ghService *services.GraphHopperService, 
 	evacuationHandler := handlers.NewEvacuationHandler(evacService)
 	r.POST("/evacuation", evacuationHandler.GetEvacuationRoute)
 
+	safeZoneService := services.NewSafeZoneService(db.DB)
+	safeZoneHandler := handlers.NewSafeZoneHandler(safeZoneService)
+	r.POST("/safezones", safeZoneHandler.CreateSafeZone)
 	return r
 }
