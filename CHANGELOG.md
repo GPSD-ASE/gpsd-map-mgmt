@@ -7,11 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.23] - 2025-04-11
+## [0.0.24] - 2025-04-11
 
 
 ### Fixed
-8cbdb39 fix: update bump-version.sh
-c396b89 fix: syntax
-3cf5441 fix: update latest version to get current
+d56a638 fix: get safezones
 
