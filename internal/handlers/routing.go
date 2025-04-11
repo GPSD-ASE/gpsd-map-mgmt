@@ -64,3 +64,21 @@ func (h *RoutingHandler) GetSafeRouting(c *gin.Context) {
 
 	c.JSON(http.StatusOK, route)
 }
+
+// GetDefaultRoute calculates a basic route without applying disaster avoidance.
+func (h *RoutingHandler) GetDefaultRoute(c *gin.Context) {
+	origin := c.Query("origin")
+	destination := c.Query("destination")
+	if origin == "" || destination == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing required parameters"})
+		return
+	}
+
+	route, err := h.GHService.GetRoute(origin, destination)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch route", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, route)
+}

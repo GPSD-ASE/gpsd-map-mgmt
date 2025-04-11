@@ -20,6 +20,7 @@ import (
 type GraphHopperServiceInterface interface {
 	GetEvacuationRoute(dangerPoint, safePoint [2]float64) (EvacuationRouteResponse, error)
 	GetSafeRoute(origin, destination string, zones []models.DisasterZone) (RouteResponse, error)
+	GetRoute(origin, destination string) (RouteResponse, error)
 }
 
 type GraphHopperService struct {
@@ -63,6 +64,51 @@ func buildPoints(origin, destination string) ([][]float64, error) {
 		{lon2, lat2},
 	}
 	return points, nil
+}
+
+func (s *GraphHopperService) GetRoute(origin, destination string) (RouteResponse, error) {
+	points, err := buildPoints(origin, destination)
+	if err != nil {
+		return RouteResponse{}, err
+	}
+
+	requestPayload := map[string]interface{}{
+		"points":         points,
+		"profile":        "car",
+		"locale":         "en",
+		"instructions":   true,
+		"calc_points":    true,
+		"points_encoded": false,
+	}
+
+	jsonBytes, err := json.Marshal(requestPayload)
+	if err != nil {
+		return RouteResponse{}, err
+	}
+
+	url := fmt.Sprintf("%s?key=%s", s.BaseURL, s.APIKey)
+	resp, err := http.Post(url, "application/json", bytes.NewReader(jsonBytes))
+	if err != nil {
+		return RouteResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return RouteResponse{}, fmt.Errorf("GraphHopper API error: %s - %s", resp.Status, string(body))
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return RouteResponse{}, err
+	}
+
+	var routeResp RouteResponse
+	if err := json.Unmarshal(body, &routeResp); err != nil {
+		return RouteResponse{}, err
+	}
+
+	return routeResp, nil
 }
 
 func (s *GraphHopperService) GetEvacuationRoute(dangerPoint, safePoint [2]float64) (EvacuationRouteResponse, error) {
