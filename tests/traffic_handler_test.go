@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// s
 type MockTrafficService struct{}
 
 func (m *MockTrafficService) GetTrafficData(lat, lon string) ([]byte, error) {
