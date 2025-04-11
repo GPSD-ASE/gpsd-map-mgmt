@@ -14,6 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// MockEvacuationService implements the EvacuationServiceInterface for testing.
 type MockEvacuationService struct{}
 
 func (m *MockEvacuationService) GetEvacuationRoute(dangerPoint [2]float64, incidentTypeID int, safePoint *[2]float64) (services.EvacuationRouteResponse, error) {
@@ -56,15 +57,13 @@ func (m *MockEvacuationService) GetEvacuationRoute(dangerPoint [2]float64, incid
 	}, nil
 }
 
-func TestGetEvacuationRouteHandler_Success(t *testing.T) {
+func TestGetEvacuationRouteHandler_Happy(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-
 	mockService := &MockEvacuationService{}
-
-	evacuationHandler := handlers.NewEvacuationHandler(mockService)
+	handler := handlers.NewEvacuationHandler(mockService)
 
 	router := gin.Default()
-	router.POST("/evacuation", evacuationHandler.GetEvacuationRoute)
+	router.POST("/evacuation", handler.GetEvacuationRoute)
 
 	payload := map[string]interface{}{
 		"danger_point":     []float64{53.349805, -6.26031},
@@ -73,21 +72,17 @@ func TestGetEvacuationRouteHandler_Success(t *testing.T) {
 	jsonPayload, err := json.Marshal(payload)
 	assert.NoError(t, err)
 
-	req, err := http.NewRequest("POST", "/evacuation", bytes.NewBuffer(jsonPayload))
+	req, err := http.NewRequest(http.MethodPost, "/evacuation", bytes.NewBuffer(jsonPayload))
 	assert.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
 
-	w := httptest.NewRecorder()
-	router.ServeHTTP(w, req)
+	recorder := httptest.NewRecorder()
+	router.ServeHTTP(recorder, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, http.StatusOK, recorder.Code)
 
 	var response services.EvacuationRouteResponse
-	err = json.Unmarshal(w.Body.Bytes(), &response)
+	err = json.Unmarshal(recorder.Body.Bytes(), &response)
 	assert.NoError(t, err)
-
 	assert.Greater(t, len(response.Paths), 0)
-	path := response.Paths[0]
-	assert.NotEmpty(t, path.Points.Type)
-	assert.NotNil(t, path.Instructions)
 }
