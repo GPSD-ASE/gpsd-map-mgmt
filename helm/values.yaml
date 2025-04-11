@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: gpsd/gpsd-map-mgmt
-  tag: v0.0.16
+  tag: v0.0.22
   pullPolicy: Always
 
 service:
