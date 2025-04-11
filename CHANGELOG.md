@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.20] - 2025-04-11
+## [0.0.21] - 2025-04-11
 
 
 ### Fixed
-d6bee65 fix: pipeline fix
-bb54397 fix: pipeline test
+bcbf401 fix: Create safezone
+d9385f3 fix: Create safezone
 
