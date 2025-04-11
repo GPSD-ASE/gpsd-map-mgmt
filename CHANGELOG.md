@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.22] - 2025-04-11
+## [0.0.23] - 2025-04-11
 
 
 ### Fixed
-b4aeeef fix: correct versioning
-e5f1054 fix: add refresh in makefile
+8cbdb39 fix: update bump-version.sh
+c396b89 fix: syntax
+3cf5441 fix: update latest version to get current
 
