@@ -23,6 +23,7 @@ func SetupRouter(db *database.Database, ghService *services.GraphHopperService, 
 	routingHandler := handlers.NewRoutingHandler(ghService, dzService)
 	r.GET("/routing", routingHandler.GetSafeRouting)
 
+	r.GET("/route", routingHandler.GetDefaultRoute)
 	// Evacuation endpoint (POST)
 	evacService := services.NewEvacuationService(db.DB, ghService) // assuming db.DB is *sql.DB
 	evacuationHandler := handlers.NewEvacuationHandler(evacService)

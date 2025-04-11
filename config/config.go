@@ -7,6 +7,7 @@ import (
 	"os"
 
 	vault "github.com/hashicorp/vault/api"
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -47,6 +48,11 @@ func LoadConfig() {
 			TOMTOM_URL = getString(vaultSecrets, "TOMTOM_URL", os.Getenv("TOMTOM_URL"))
 		}
 		log.Printf("DEBUG - All vault secrets : %v", vaultSecrets)
+	} else {
+		err := godotenv.Load()
+		if err != nil {
+			log.Println("Warning: No .env file found, using system env variables")
+		}
 	}
 	if MAP_MGMT_DB_HOST == "" {
 		MAP_MGMT_DB_HOST = os.Getenv("MAP_MGMT_DB_HOST")
@@ -59,6 +65,9 @@ func LoadConfig() {
 	}
 	if MAP_MGMT_DB_PORT == "" {
 		MAP_MGMT_DB_PORT = os.Getenv("MAP_MGMT_DB_PORT")
+	}
+	if MAP_MGMT_APP_PORT == "" {
+		MAP_MGMT_APP_PORT = os.Getenv("MAP_MGMT_APP_PORT")
 	}
 	if MAP_MGMT_DB_USER == "" {
 		MAP_MGMT_DB_USER = os.Getenv("MAP_MGMT_DB_USER")

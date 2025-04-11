@@ -65,7 +65,6 @@ func (h *RoutingHandler) GetSafeRouting(c *gin.Context) {
 	c.JSON(http.StatusOK, route)
 }
 
-// GetDefaultRoute calculates a basic route without applying disaster avoidance.
 func (h *RoutingHandler) GetDefaultRoute(c *gin.Context) {
 	origin := c.Query("origin")
 	destination := c.Query("destination")

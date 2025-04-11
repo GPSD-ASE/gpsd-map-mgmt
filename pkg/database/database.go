@@ -36,8 +36,9 @@ func NewDatabase() (*Database, error) {
 	config.LoadConfig()
 
 	dbURL := config.MAP_MGMT_DB_HOST
+	println(dbURL)
 	if !strings.Contains(dbURL, "@") {
-		dbURL = fmt.Sprintf("postgres://%s:%s@%s", config.MAP_MGMT_DB_USER, config.MAP_MGMT_DB_PASS, dbURL[11:])
+		dbURL = fmt.Sprintf("postgres://%s:%s@%s", config.MAP_MGMT_DB_USER, config.MAP_MGMT_DB_PASS, dbURL)
 	}
 	if dbURL == "" {
 		return nil, fmt.Errorf("DATABASE_URL is not set")
