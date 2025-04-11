@@ -20,7 +20,14 @@ func (m *MockSafeZoneService) CreateSafeZone(sz models.SafeZoneCreate) (int, err
 	// Just pretend we inserted row ID 42
 	return 42, nil
 }
+func (m *MockSafeZoneService) GetSafeZones() ([]models.SafeZone, error) {
+	zones := []models.SafeZone{
+		{ZoneID: 1, ZoneName: "Flood Safe Zone", ZoneLat: 53.349805, ZoneLon: -6.26031, IncidentTypeID: 1},
+		{ZoneID: 1, ZoneName: "EarthQuake Safe Zone", ZoneLat: 53.349805, ZoneLon: -6.26031, IncidentTypeID: 1},
+	}
 
+	return zones, nil
+}
 func TestCreateSafeZone_Happy(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 

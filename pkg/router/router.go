@@ -32,5 +32,6 @@ func SetupRouter(db *database.Database, ghService *services.GraphHopperService, 
 	safeZoneService := services.NewSafeZoneService(db.DB)
 	safeZoneHandler := handlers.NewSafeZoneHandler(safeZoneService)
 	r.POST("/safezones", safeZoneHandler.CreateSafeZone)
+	r.GET("/safezones", safeZoneHandler.GetSafeZones)
 	return r
 }

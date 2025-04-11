@@ -61,3 +61,20 @@ func (h *SafeZoneHandler) CreateSafeZone(c *gin.Context) {
 		"zone_name": safeZone.ZoneName,
 	})
 }
+
+// GetSafeZones handles GET requests to retrieve all safe zones.
+// @Summary      Retrieve Safe Zones
+// @Description  Retrieves a list of safe zones from the database.
+// @Tags         SafeZone
+// @Produce      json
+// @Success      200  {array}   models.SafeZone
+// @Failure      500  {object}  map[string]string  "Internal Server Error"
+// @Router       /safezones [get]
+func (h *SafeZoneHandler) GetSafeZones(c *gin.Context) {
+	safeZones, err := h.Service.GetSafeZones()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch safe zones"})
+		return
+	}
+	c.JSON(http.StatusOK, safeZones)
+}

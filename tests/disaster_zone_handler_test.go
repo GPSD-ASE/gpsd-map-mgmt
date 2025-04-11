@@ -13,7 +13,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// MockDisasterZoneService implements the DisasterZoneServiceInterface for testing.
 type MockDisasterZoneService struct{}
 
 func (m *MockDisasterZoneService) GetDisasterZones() ([]models.DisasterZone, error) {
