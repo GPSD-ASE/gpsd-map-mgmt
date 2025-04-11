@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.19] - 2025-04-03
+## [0.0.20] - 2025-04-11
 
 
 ### Fixed
-529dd6d fix: change user to map
+d6bee65 fix: pipeline fix
+bb54397 fix: pipeline test
 
