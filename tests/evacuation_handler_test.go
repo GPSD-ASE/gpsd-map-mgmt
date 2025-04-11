@@ -14,7 +14,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// MockEvacuationService implements the EvacuationServiceInterface for testing.
 type MockEvacuationService struct{}
 
 func (m *MockEvacuationService) GetEvacuationRoute(dangerPoint [2]float64, incidentTypeID int, safePoint *[2]float64) (services.EvacuationRouteResponse, error) {

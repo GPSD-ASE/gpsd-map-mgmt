@@ -12,11 +12,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// MockTrafficService implements TrafficServiceInterface.
 type MockTrafficService struct{}
 
 func (m *MockTrafficService) GetTrafficData(lat, lon string) ([]byte, error) {
-	// Return a sample JSON response.
 	sample := map[string]interface{}{
 		"flowSegmentData": map[string]interface{}{
 			"coordinates":        [][]float64{{-6.26031, 53.349805}},

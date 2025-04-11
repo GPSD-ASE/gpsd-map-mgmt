@@ -14,7 +14,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// MockGraphHopperService implements the GraphHopperServiceInterface for testing happy scenarios.
 type MockGraphHopperService struct{}
 
 func (m *MockGraphHopperService) GetRoute(origin, destination string) (services.RouteResponse, error) {
@@ -40,7 +39,6 @@ func (m *MockGraphHopperService) GetRoute(origin, destination string) (services.
 }
 
 func (m *MockGraphHopperService) GetEvacuationRoute(dangerPoint, safePoint [2]float64) (services.EvacuationRouteResponse, error) {
-	// Not used in the safe routing happy test below.
 	return services.EvacuationRouteResponse{}, nil
 }
 
@@ -66,7 +64,6 @@ func (m *MockGraphHopperService) GetSafeRoute(origin, destination string, zones 
 	}, nil
 }
 
-// MockDisasterZoneServiceForActive implements GetActiveDisasterZones for safe routing.
 type MockDisasterZoneServiceForActive struct{}
 
 func (m *MockDisasterZoneServiceForActive) GetDisasterZones() ([]models.DisasterZone, error) {
@@ -83,7 +80,6 @@ func (m *MockDisasterZoneServiceForActive) GetActiveDisasterZones() ([]models.Di
 func TestGetDefaultRouteHandler_Happy(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mockGHService := &MockGraphHopperService{}
-	// For default route, the disaster zone service is not used.
 	mockDZService := &MockDisasterZoneServiceForActive{}
 
 	handler := handlers.NewRoutingHandler(mockGHService, mockDZService)
